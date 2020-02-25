@@ -1,0 +1,39 @@
+---
+- name: installation de l'appli flaskr
+  hosts: client
+  remote_user: root
+  
+  vars:
+    packages:
+      - unzip
+      - python-minimal
+      - python3 
+      - python-pip
+
+  
+  tasks: 
+    - name: telechargement de flaskr
+      get_url: 
+        url: https://github.com/silshack/flaskr/archive/master.zip
+        dest: /tmp/
+        mode: '0440'
+   
+    - name: installation des outils
+      apt: 
+        pkg: "{{ packages }}"  
+
+    - name: creation du rep de l application
+      file:
+        path: /app/flaskr.botify.com/
+        state: directory
+        mode: '0755'
+
+    - name: dezip de flaskr
+      unarchive:
+        src: /tmp/flaskr-master.zip
+        dest: /app/flaskr.botify.com/
+        remote_src: yes
+
+    - pip:
+       name: Flask 
+...
